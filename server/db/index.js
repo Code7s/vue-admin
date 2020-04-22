@@ -4,7 +4,7 @@
 
 let mongoose = require('mongoose')
 const DB_NAME = 'vue-admin'
-const DB_URL = 'lcalhost:27017'
+const DB_URL = 'localhost:27017'
 
 // 暴露promise
 module.exports = new Promise((res, rej) => {

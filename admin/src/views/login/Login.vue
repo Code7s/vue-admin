@@ -6,7 +6,7 @@
         <span>隐藏</span>录
       </h1>
       <!-- :model绑定数据对象 :rules绑定验证规则 -->
-      <el-form class="login-form" :model="loginForm" :rules="rules">
+      <el-form ref="loginRef" class="login-form" :model="loginForm" :rules="rules">
         <el-form-item prop="email">
           <el-input prefix-icon="el-icon-user" placeholder="Email" v-model="loginForm.email"></el-input>
         </el-form-item>
@@ -19,8 +19,8 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="login-wrap">
-          <el-button class="login" type="danger">登录</el-button>
-          <el-button class="register">注册</el-button>
+          <el-button class="login" @click="login()" type="danger">登录</el-button>
+          <el-button class="register" @click="goRegister()">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -66,6 +66,16 @@ export default {
         ]
       }
     };
+  },
+  methods: {
+    goRegister() {
+      this.$router.push({ path: "/register" });
+    },
+    login() {
+      this.$refs.loginRef.validate(vaild => {
+        console.log(vaild);
+      });
+    }
   }
 };
 </script>

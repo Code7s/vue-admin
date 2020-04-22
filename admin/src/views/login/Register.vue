@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item class="register-wrap">
           <el-button class="register" type="danger">注册</el-button>
-          <el-button>返回登录页</el-button>
+          <el-button @click="goLogin()">返回登录页</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -74,6 +74,11 @@ export default {
         checkPass: []
       }
     };
+  },
+  methods: {
+    goLogin() {
+      this.$router.push({ path: "/login" });
+    }
   }
 };
 </script>
