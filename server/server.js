@@ -1,14 +1,35 @@
+// 引入express
+let express = require('express')
 // 引入数据库连接模块
-let db = require('./db/index')
-// 引入模型对象
-let userModel = require('./module/userModel.js')
+let db = require('./db/db.js')
+// 创建app服务对象
+let app = express()
 
-  // 这里前面加 ; 是为了避免之前的代码没写;导致解析出错
-  ; (async () => {
-    // 等待数据库连接成功
-    await db
+let registerRouter = require('./router/register')
+let loginRouter = require('./router/login')
 
-    // 操作数据库
-    let result = await userModel.findOne({ age: 20 })
-    console.log(result);
-  })()
+// 使用中间件，获取post请求体参数挂载到req.body上
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+// 数据库连接成功后再注册路由
+db.then(() => {
+  // 允许跨域访问
+  app.all('*', function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'x-Requested-With');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next()
+  })
+  // 使用注册、登录路由
+  app.use(registerRouter)
+  app.use(loginRouter)
+
+}).catch((err) => {
+  console.log('数据库连接失败！\n' + err);
+})
+// 监听7000端口
+app.listen(7000, (err) => {
+  err ? console.log(err) : console.log('服务器启动成功！\nhttp://localhost:7000');
+})

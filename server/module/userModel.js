@@ -1,11 +1,12 @@
 /* 
 此模块用来创建模型对象
 */
-
 let mongoose = require('mongoose')
 let Schema = mongoose.Schema
-
-let loginSchema = new Schema({
+// 引入bcryptjs加密，需先安装yarn add bcryptjs
+var bcrypt = require('bcryptjs')
+// 注册模块
+let userSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -14,18 +15,15 @@ let loginSchema = new Schema({
   password: {
     type: String,
     required: true,
-  },
-  user_id: {
-    type: Number,
-    required: true,
-    unique: true
+    select: false,
+    // 使用bcrypt加密,相比于md5加密更安全，因为它是不可逆的，同一数据每次转成的密文都不相同
+    set(val) {
+      return bcrypt.hashSync(val, 12)
+    }
   },
   user_name: {
     type: String,
-    required: true
-  },
-  info: {
-    type: Schema.Types.Mixed
+    default: '新用户'
   },
   data: {
     type: Date,
@@ -38,4 +36,4 @@ let loginSchema = new Schema({
 })
 
 //暴露模块对象
-module.exports = mongoose.model('login', loginSchema)
+module.exports = mongoose.model('user', userSchema)

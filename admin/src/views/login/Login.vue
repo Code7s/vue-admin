@@ -73,7 +73,18 @@ export default {
     },
     login() {
       this.$refs.loginRef.validate(vaild => {
-        console.log(vaild);
+        if (vaild) {
+          this.$axios.post("login", this.loginForm).then(result => {
+            console.log(result.data);
+            // 将token存储到本地
+            localStorage.token = result.data.token;
+            this.$router.push("/");
+            this.$message({
+              type: "success",
+              message: "登录成功！"
+            });
+          });
+        }
       });
     }
   }

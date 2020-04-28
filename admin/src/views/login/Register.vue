@@ -5,7 +5,7 @@
         注
         <span>隐藏</span>册
       </h1>
-      <el-form class="register-form" :model="registerForm" :rules="rules">
+      <el-form class="register-form" ref="registerRef" :model="registerForm" :rules="rules">
         <el-form-item prop="email">
           <el-input prefix-icon="el-icon-user" placeholder="邮箱" v-model="registerForm.email"></el-input>
         </el-form-item>
@@ -26,10 +26,13 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="register-wrap">
-          <el-button class="register" type="danger">注册</el-button>
+          <el-button class="register" @click="register()" type="danger">注册</el-button>
           <el-button @click="goLogin()">返回登录页</el-button>
         </el-form-item>
       </el-form>
+      <!-- <el-button :plain="true" @click="open1">成功</el-button>
+      <el-button :plain="true" @click="open2">警告</el-button>
+      <el-button :plain="true" @click="open3">错误</el-button>-->
     </div>
   </div>
 </template>
@@ -38,6 +41,7 @@
 export default {
   data() {
     return {
+      tip: "",
       registerForm: {
         email: "",
         password: "",
@@ -67,7 +71,7 @@ export default {
           {
             min: 6,
             max: 16,
-            message: "至少输入6个字符，最多不超过16个字符",
+            message: "至少输入6个字符，最多不超过16个字符,允许小数点和下划线",
             trigger: "blur"
           }
         ],
@@ -76,8 +80,62 @@ export default {
     };
   },
   methods: {
+    // 注册
+    register() {
+      this.$refs.registerRef.validate(valid => {
+        if (valid) {
+          this.$axios.post("register", this.registerForm).then(result => {
+            // console.log(result);
+            // 注册对应弹窗
+            if (result.status === 200) {
+              switch (result.data.status) {
+                case 0:
+                  this.tip = result.data.tip;
+                  this.open1();
+                  break;
+                case 1:
+                  this.tip = result.data.tip;
+                  this.open2();
+                  break;
+                case 2:
+                  this.tip = result.data.tip;
+                  this.open2();
+                  break;
+                case 3:
+                  this.tip = result.data.tip;
+                  this.open2();
+                  break;
+                case 4:
+                  this.tip = result.data.tip;
+                  this.open3();
+              }
+            }
+          });
+        }
+      });
+    },
+    // 返回登录
     goLogin() {
       this.$router.push({ path: "/login" });
+    },
+    // 提示弹出
+    open1() {
+      this.$message({
+        message: this.tip,
+        type: "success"
+      });
+    },
+    open2() {
+      this.$message({
+        message: this.tip,
+        type: "warning"
+      });
+    },
+    open3() {
+      this.$message({
+        message: this.tip,
+        type: "error"
+      });
     }
   }
 };
