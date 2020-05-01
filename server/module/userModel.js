@@ -15,6 +15,7 @@ let userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    // 使用select:false 设置该字段在查询的时候不显示，如需查询使用 .select('+password')
     select: false,
     // 使用bcrypt加密,相比于md5加密更安全，因为它是不可逆的，同一数据每次转成的密文都不相同
     set(val) {

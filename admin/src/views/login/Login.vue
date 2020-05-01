@@ -31,10 +31,11 @@
 export default {
   data() {
     return {
+      message: "",
       // 表单数据对象
       loginForm: {
-        email: "",
-        password: ""
+        email: "qq@qq.com",
+        password: "111111"
       },
       // 验证规则对象
       rules: {
@@ -72,19 +73,53 @@ export default {
       this.$router.push({ path: "/register" });
     },
     login() {
-      this.$refs.loginRef.validate(vaild => {
+      this.$refs.loginRef.validate(async vaild => {
         if (vaild) {
-          this.$axios.post("login", this.loginForm).then(result => {
-            console.log(result.data);
-            // 将token存储到本地
-            localStorage.token = result.data.token;
-            this.$router.push("/");
-            this.$message({
-              type: "success",
-              message: "登录成功！"
-            });
-          });
+          let result = await this.$axios.post("login", this.loginForm);
+          if (result.status === 200) {
+            switch (result.data.status) {
+              // 登录成功
+              case 0:
+                localStorage.token = result.data.token;
+                this.$router.push({ path: "/" });
+                this.open3();
+                break;
+              case 1:
+                this.message = result.data.message;
+                this.open1();
+                break;
+              case 2:
+                this.message = result.data.message;
+                this.open1();
+                break;
+              case 3:
+                this.message = result.data.message;
+                this.open2();
+                break;
+              case 4:
+                this.message = result.data.message;
+                this.open2();
+            }
+          }
         }
+      });
+    },
+    open3() {
+      this.$message({
+        message: "登录成功！",
+        type: "success"
+      });
+    },
+    open1() {
+      this.$message({
+        message: this.message,
+        type: "warning"
+      });
+    },
+    open2() {
+      this.$message({
+        message: this.message,
+        type: "error"
       });
     }
   }

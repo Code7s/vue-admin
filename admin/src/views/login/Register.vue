@@ -30,9 +30,6 @@
           <el-button @click="goLogin()">返回登录页</el-button>
         </el-form-item>
       </el-form>
-      <!-- <el-button :plain="true" @click="open1">成功</el-button>
-      <el-button :plain="true" @click="open2">警告</el-button>
-      <el-button :plain="true" @click="open3">错误</el-button>-->
     </div>
   </div>
 </template>
@@ -41,7 +38,7 @@
 export default {
   data() {
     return {
-      tip: "",
+      message: "",
       registerForm: {
         email: "",
         password: "",
@@ -82,35 +79,34 @@ export default {
   methods: {
     // 注册
     register() {
-      this.$refs.registerRef.validate(valid => {
+      this.$refs.registerRef.validate(async valid => {
         if (valid) {
-          this.$axios.post("register", this.registerForm).then(result => {
-            // console.log(result);
-            // 注册对应弹窗
-            if (result.status === 200) {
-              switch (result.data.status) {
-                case 0:
-                  this.tip = result.data.tip;
-                  this.open1();
-                  break;
-                case 1:
-                  this.tip = result.data.tip;
-                  this.open2();
-                  break;
-                case 2:
-                  this.tip = result.data.tip;
-                  this.open2();
-                  break;
-                case 3:
-                  this.tip = result.data.tip;
-                  this.open2();
-                  break;
-                case 4:
-                  this.tip = result.data.tip;
-                  this.open3();
-              }
+          let result = await this.$axios.post("register", this.registerForm);
+          // console.log(result);
+          // 注册对应弹窗
+          if (result.status === 200) {
+            switch (result.data.status) {
+              case 0:
+                this.message = result.data.message;
+                this.open1();
+                break;
+              case 1:
+                this.message = result.data.message;
+                this.open2();
+                break;
+              case 2:
+                this.message = result.data.message;
+                this.open2();
+                break;
+              case 3:
+                this.message = result.data.message;
+                this.open2();
+                break;
+              case 4:
+                this.message = result.data.message;
+                this.open3();
             }
-          });
+          }
         }
       });
     },
@@ -121,19 +117,19 @@ export default {
     // 提示弹出
     open1() {
       this.$message({
-        message: this.tip,
+        message: this.message,
         type: "success"
       });
     },
     open2() {
       this.$message({
-        message: this.tip,
+        message: this.message,
         type: "warning"
       });
     },
     open3() {
       this.$message({
-        message: this.tip,
+        message: this.message,
         type: "error"
       });
     }
