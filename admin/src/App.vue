@@ -1,11 +1,11 @@
 <template>
- <div id="container">
+ <div id="app">
    <router-view></router-view>
  </div>
 </template>
 
 <style>
-#container{
-  height: 100%;
+#app{
+  height: 100vh;
 }
 </style>

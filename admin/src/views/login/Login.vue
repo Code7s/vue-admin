@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     goRegister() {
-      this.$router.push({ path: "/register" });
+      this.$router.push('/register');
     },
     login() {
       this.$refs.loginRef.validate(async vaild => {
@@ -149,6 +149,7 @@ export default {
     color: rgb(80, 80, 80);
     text-align: center;
     line-height: 30px;
+    padding: 10px 0;
     span {
       visibility: hidden;
     }

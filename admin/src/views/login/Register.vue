@@ -160,6 +160,7 @@ export default {
     color: rgb(80, 80, 80);
     text-align: center;
     line-height: 30px;
+    padding: 10px 0;
     span {
       visibility: hidden;
     }

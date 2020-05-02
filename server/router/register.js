@@ -2,7 +2,7 @@
 module.exports = app => {
   let { Router } = require('express')
   let router = new Router()
-  app.use('/', router)
+  app.use('/api', router)
   // 引入用户模型对象
   let userModel = require('../module/userModel')
 

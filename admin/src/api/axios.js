@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 
 // 设置默认请求根路径
-axios.defaults.baseURL = 'http://localhost:7000/'
+axios.defaults.baseURL = 'http://localhost:7000/api/'
 
 // 拦截请求
 axios.interceptors.request.use(function (config) {
@@ -12,7 +12,7 @@ axios.interceptors.request.use(function (config) {
   }
   return config;
 }, function (err) {
-  return Promise.reject(err);
+  return Promise.reject(err)
 });
 
 // 拦截响应

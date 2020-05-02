@@ -19,13 +19,13 @@ const router = new VueRouter({
 
 // 挂载路由导航守卫
 // to：将要访问的路径   from:从哪个路径跳转而来 next:继续
-router.beforeEach((to,from,next)=>{
+router.beforeEach((to, from, next) => {
   // 登录注册页直接放行
-  if(to.path==='/login'){
+  if (to.path === '/login' || '/register') {
     return next()
   }
-  const isToken=window.localStorage.getItem('token')
-  if(!isToken){
+  const isToken = localStorage.getItem('token')
+  if (!isToken) {
     return next('/login')
   }
   next()

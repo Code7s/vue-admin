@@ -1,5 +1,2 @@
-#app,body,html{margin:0;padding:0}
-body{
-  width: 100%;
-  height: 100vh;
-}
+#app,body,h1,html,p{margin:0;padding:0}
+body{width:100%;height:100vh;}

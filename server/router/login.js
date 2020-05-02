@@ -2,18 +2,16 @@
 module.exports = app => {
   // 导入生成token的包，需安装 yarn add jsonwebtoken
   const jwt = require('jsonwebtoken')
-  
   // const assert = require('http-assert')
+  let userMiddleware = require('../middleware/auth')
+
   let { Router } = require('express')
   let router = new Router()
-  app.use('/', router)
+  app.use('/api', router)
 
   // 引入用户模型对象
   let userModel = require('../module/userModel')
 
-  router.get('/', (req, res) => {
-    res.send('ok')
-  })
   // 登录接口
   router.post('/login', async (req, res) => {
     const { email, password } = req.body
