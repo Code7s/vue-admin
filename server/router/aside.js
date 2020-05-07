@@ -1,10 +1,10 @@
 module.exports = app => {
   let { Router } = require('express')
   let router = new Router()
-  let authMiddleware = require('../middleware/auth')
   app.use('/api', router)
 
-  router.get('/aside_list', authMiddleware(), (req, res) => {
+  let authMiddleware = require('../middleware/auth')
+  router.get('/aside_list', authMiddleware(app), (req, res) => {
     // 侧边菜单列表结构
     const asideList = [
       {
@@ -46,6 +46,10 @@ module.exports = app => {
         ]
       }
     ]
-    res.send(asideList)
+    try {
+      res.send(asideList)
+    } catch (err) {
+
+    }
   })
 }

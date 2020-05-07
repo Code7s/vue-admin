@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import router from '../router/router'
 
 // 设置默认请求根路径
 axios.defaults.baseURL = 'http://localhost:7000/api/'
@@ -25,7 +26,7 @@ axios.interceptors.response.use(res => {
       message: err.response.data.message
     })
     if (err.response.status === 401) {
-      Vue.prototype.$router.push('/login')
+      router.push('./login')
     }
   }
 })

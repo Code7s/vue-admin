@@ -1,14 +1,11 @@
 // 导出为一个函数接收app参数，这样就可以在login.js中使用全局的app
 module.exports = app => {
-  // 导入生成token的包，需安装 yarn add jsonwebtoken
-  const jwt = require('jsonwebtoken')
-  // const assert = require('http-assert')
-  let userMiddleware = require('../middleware/auth')
-
   let { Router } = require('express')
   let router = new Router()
   app.use('/api', router)
 
+  // 导入生成token的包，需安装 yarn add jsonwebtoken
+  let jwt = require('jsonwebtoken')
   // 引入用户模型对象
   let userModel = require('../module/userModel')
 
@@ -26,7 +23,7 @@ module.exports = app => {
       return
     }
     // 判断用户是否注册
-    try {
+    try {// 在操作数据库时并不能保证数据库一定会有响应，所以尽量放在try里执行
       // 由于password设置了select:false，这里需要使用 .select('+password')来查询此字段
       let findResult = await userModel.findOne({ email }).select('+password')
       if (!findResult) {
@@ -42,7 +39,6 @@ module.exports = app => {
       const token = jwt.sign({ email: findResult.email }, app.get('secret'))
       res.send({ token: token, status: 0, message: "登录成功！" })
     } catch (err) {
-      console.log(err);
       res.status(422).send({ message: '出问题了,请稍后再试！' })
     }
   })

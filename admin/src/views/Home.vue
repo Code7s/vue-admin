@@ -6,8 +6,15 @@
     </el-header>
     <el-container>
       <!-- 侧边导航 -->
-      <el-aside width="200px">
-        <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+      <el-aside :width="isFold?'64px':'200px'">
+        <el-menu
+          :collapse-transition="false"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          unique-opened
+          :collapse="isFold"
+        >
           <el-submenu v-for="item in asideList" :key="item.id" :index="item.id+''">
             <template slot="title">
               <i :class="iconList[item.id]"></i>
@@ -21,10 +28,14 @@
             </el-menu-item>
           </el-submenu>
         </el-menu>
+        <div
+          :class="['drawer',[isFold?'el-icon-arrow-right':'el-icon-arrow-left']]"
+          @click="fold()"
+        ></div>
       </el-aside>
       <!-- 内容区 -->
       <el-main>
-        <el-header>hdhad</el-header>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -34,6 +45,8 @@
 export default {
   data() {
     return {
+      // 侧边栏是否折叠
+      isFold: false,
       asideList: [],
       // 设置侧边栏一级标题图标 {id:class名}
       iconList: {
@@ -54,17 +67,22 @@ export default {
         7: "el-icon-document",
         8: "el-icon-coin"
       }
-    }
+    };
   },
   methods: {
     exitLogin() {
       localStorage.clear();
       this.$router.push("/login");
+    },
+    fold() {
+      this.isFold = !this.isFold;
     }
   },
   created() {
     this.$axios.get("aside_list").then(result => {
-      this.asideList = result.data;
+      if (result.status === 200) {
+        this.asideList = result.data;
+      }
     });
   }
 };
@@ -91,13 +109,30 @@ export default {
   }
 }
 .el-aside {
+  // 避免隐藏按钮不显示
+  overflow: unset;
+  position: relative;
   background-color: #565c63;
   color: #333;
   text-align: left;
   line-height: 200px;
-  .el-submenu,
-  .el-menu-item {
-    width: 200px;
+  // 这里侧边栏有1px没有对齐，发现是el-menu中border的问题
+  .el-menu {
+    border-right: 0;
+  }
+  .drawer {
+    width: 10px;
+    height: 80px;
+    background-color: #b4b4b4;
+    border-radius: 0 5px 5px 0;
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    margin-top: -40px;
+    font-size: 10px;
+    color: black;
+    line-height: 80px;
+    cursor: pointer;
   }
 }
 .el-main {
