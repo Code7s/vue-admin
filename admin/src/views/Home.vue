@@ -2,25 +2,35 @@
   <el-container class="wrap">
     <el-header>
       <h1>后台管理系统</h1>
-      <span class="exit" @click="exitLogin()">退出</span>
+      <div class="user">
+        <span class="user_name">{{userInfo.user_name}}</span>
+        <span class="exit" @click="exitLogin()">退出</span>
+      </div>
     </el-header>
     <el-container>
       <!-- 侧边导航 -->
       <el-aside :width="isFold?'64px':'200px'">
         <el-menu
           :collapse-transition="false"
+          :default-active="activeRouter"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
           unique-opened
           :collapse="isFold"
+          router
         >
           <el-submenu v-for="item in asideList" :key="item.id" :index="item.id+''">
             <template slot="title">
               <i :class="iconList[item.id]"></i>
               <span>{{item.title}}</span>
             </template>
-            <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="subItem.id+''">
+            <el-menu-item
+              v-for="subItem in item.children"
+              :key="subItem.id"
+              :index="asideRouter[subItem.id]"
+              @click="saveRouter(asideRouter[subItem.id])"
+            >
               <template slot="title">
                 <i :class="subIconList[subItem.id]"></i>
                 <span>{{subItem.title}}</span>
@@ -45,45 +55,89 @@
 export default {
   data() {
     return {
+      // 用户信息
+      userInfo: {},
       // 侧边栏是否折叠
       isFold: false,
+      // 侧边栏列表数据
       asideList: [],
+      // 侧边栏路由跳转
+      asideRouter: [
+        "/userlist",
+        "/roles",
+        "/power",
+        "/goodslist",
+        "/sortarg",
+        "/goodsarg",
+        "/orderlist",
+        "/statistics"
+      ],
+      // 当前激活的路由
+      activeRouter: null,
       // 设置侧边栏一级标题图标 {id:class名}
-      iconList: {
-        1: "el-icon-user-solid",
-        2: "el-icon-warning",
-        3: "el-icon-s-goods",
-        4: "el-icon-s-order",
-        5: "el-icon-s-marketing"
-      },
+
+      iconList: [
+        "el-icon-user-solid",
+        "el-icon-warning",
+        "el-icon-s-goods",
+        "el-icon-s-order",
+        "el-icon-s-marketing"
+      ],
+
       // 设置侧边栏二级标题图标 {id:class名}
-      subIconList: {
-        1: "el-icon-user",
-        2: "el-icon-user",
-        3: "el-icon-warning-outline",
-        4: "el-icon-goods",
-        5: "el-icon-tickets",
-        6: "el-icon-guide",
-        7: "el-icon-document",
-        8: "el-icon-coin"
-      }
+      subIconList: [
+        "el-icon-user",
+        "el-icon-user",
+        "el-icon-warning-outline",
+        "el-icon-goods",
+        "el-icon-tickets",
+        "el-icon-guide",
+        "el-icon-document",
+        "el-icon-coin"
+      ]
     };
   },
   methods: {
+    // 获取用户名
+    getUser() {
+      this.$axios.get("user").then(result => {
+        if (result.status === 200) {
+          this.userInfo = result.data;
+          sessionStorage.setItem("userInfo", JSON.stringify(result.data));
+        }
+      });
+    },
+    getAsideList() {
+      this.$axios.get("aside_list").then(result => {
+        if (result.status === 200) {
+          this.asideList = result.data;
+        }
+      });
+    },
+    // 退出登录
     exitLogin() {
       localStorage.clear();
       this.$router.push("/login");
     },
+    // 侧边栏展开按钮开关
     fold() {
       this.isFold = !this.isFold;
+    },
+    // 侧边栏点击保存router到sessionStorage
+    saveRouter(r) {
+      this.activeRouter = r;
+      sessionStorage.setItem("router", r);
     }
   },
   created() {
-    this.$axios.get("aside_list").then(result => {
-      if (result.status === 200) {
-        this.asideList = result.data;
-      }
-    });
+    this.getUser();
+    this.getAsideList();
+    this.activeRouter = sessionStorage.getItem("router");
+  },
+  provide: function() {
+    return {
+      userInfo: this.userInfo
+    };
   }
 };
 </script>
@@ -95,17 +149,25 @@ export default {
 .el-header {
   display: flex;
   justify-content: space-between;
-  padding-right: 70px !important;
   background-color: #283641;
   line-height: 60px;
   h1 {
     font-weight: normal;
     color: #fff;
   }
-  .exit {
+  .user {
     font-size: 14px;
-    color: #f5f6f7;
-    cursor: pointer;
+    .exit {
+      color: #f5f6f7;
+      cursor: pointer;
+    }
+    .exit:hover {
+      color: #59d0ff;
+    }
+    .user_name {
+      color: #59d0ff;
+      padding-right: 15px;
+    }
   }
 }
 .el-aside {

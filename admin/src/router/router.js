@@ -3,12 +3,36 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/login/Login.vue'
 import Register from '../views/login/Register.vue'
+import Welcome from '../views/main/Welcome.vue'
+import UserList from '../views/main/UserList'
+import Roles from '../views/main/Roles'
+import Power from '../views/main/Power'
+import GoodsList from '../views/main/GoodsList'
+import SortArg from '../views/main/SortArg'
+import GoodsArg from '../views/main/GoodsArg'
+import OrderList from '../views/main/OrderList'
+import Statistics from '../views/main/Statistics'
 
 Vue.use(VueRouter)
 
 // 路由规则
 const routes = [
-  { path: "/", component: Home },
+  {
+    path: "/",
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome },
+      { path: '/userlist', component: UserList},
+      { path: '/roles', component: Roles},
+      { path: '/power', component: Power},
+      { path: '/goodslist', component: GoodsList},
+      { path: '/sortarg', component: SortArg},
+      { path: '/goodsarg', component: GoodsArg},
+      { path: '/orderlist', component: OrderList},
+      { path: '/statistics', component: Statistics},
+    ]
+  },
   { path: '/login', component: Login },
   { path: '/register', component: Register }
 ]

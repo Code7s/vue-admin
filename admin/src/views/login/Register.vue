@@ -6,8 +6,11 @@
         <span>隐藏</span>册
       </h1>
       <el-form class="register-form" ref="registerRef" :model="registerForm" :rules="rules">
+        <el-form-item prop="user_name">
+          <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="registerForm.user_name"></el-input>
+        </el-form-item>
         <el-form-item prop="email">
-          <el-input prefix-icon="el-icon-user" placeholder="邮箱" v-model="registerForm.email"></el-input>
+          <el-input prefix-icon="el-icon-message" placeholder="邮箱" v-model="registerForm.email"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
@@ -40,6 +43,7 @@ export default {
     return {
       message: "",
       registerForm: {
+        user_name: "",
         email: "",
         password: "",
         res_password: ""
@@ -105,6 +109,9 @@ export default {
               case 4:
                 this.message = result.data.message;
                 this.open3();
+              case 5:
+                this.message = result.data.message;
+                this.open2();
             }
           }
         }
