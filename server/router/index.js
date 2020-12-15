@@ -7,9 +7,25 @@ module.exports = app => {
   // 引入模型对象
   let userModel = require('../module/userModel')
   let userListModel = require('../module/userListModel')
+  let asideModel = require('../module/asideModel')
+
+  // 获取当前登录用户信息
+  router.get('/user', authMiddleware(app), (req, res) => {
+    res.send(req.user)
+  })
+
+  // 获取侧边栏分类
+  router.get('/aside_list', async (req, res) => {
+    try {
+      let asideList = await asideModel.findOne({})
+      res.send(asideList.aside)
+    } catch (err) {
+      console.log(err);
+    }
+  })
 
   // 添加用户
-  router.post('/add_user', async (req, res) => {
+  router.post('/add_user', authMiddleware(app), async (req, res) => {
     const { user_name, email, role_name } = req.body
     // 验证客户端传过来的数据是否正确
     try {
@@ -33,14 +49,11 @@ module.exports = app => {
       res.status(500).send({ message: '出错了，稍后再试！' })
     }
   })
-  // 获取用户列表
-  router.get('/user_list', async (req, res) => {
-    let user_list=[]
-    
-  })
 
-  // 获取当前登录用户信息
-  router.get('/user', authMiddleware(app), (req, res) => {
-    res.send(req.user)
+  // 获取用户列表 (暂时全部获取无需分页)
+  router.get('/user_list', authMiddleware(app), async (req, res) => {
+    // const { pageNum, pageSize } = req.query
+    let userListData = await userListModel.find()
+    res.send(userListData)
   })
 }

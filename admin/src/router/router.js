@@ -18,19 +18,23 @@ Vue.use(VueRouter)
 // 路由规则
 const routes = [
   {
-    path: "/",
+    path: '/',
+    redirect: '/home',
+  },
+  {
+    path: "/home",
     component: Home,
-    redirect: '/welcome',
+    redirect:'/welcome',
     children: [
       { path: '/welcome', component: Welcome },
-      { path: '/userlist', component: UserList},
-      { path: '/roles', component: Roles},
-      { path: '/power', component: Power},
-      { path: '/goodslist', component: GoodsList},
-      { path: '/sortarg', component: SortArg},
-      { path: '/goodsarg', component: GoodsArg},
-      { path: '/orderlist', component: OrderList},
-      { path: '/statistics', component: Statistics},
+      { path: '/userlist', component: UserList },
+      { path: '/roles', component: Roles },
+      { path: '/power', component: Power },
+      { path: '/goodslist', component: GoodsList },
+      { path: '/sortarg', component: SortArg },
+      { path: '/goodsarg', component: GoodsArg },
+      { path: '/orderlist', component: OrderList },
+      { path: '/statistics', component: Statistics },
     ]
   },
   { path: '/login', component: Login },

@@ -1,7 +1,7 @@
 <template>
   <div class="userlist">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
@@ -16,14 +16,41 @@
           <el-button @click="addUser()" type="primary">添加用户</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" style="width: 100%;margin-top:20px;">
+      <el-table :data="tableData" style="width: 100%;margin-top:20px;" border stripe>
         <el-table-column type="index"></el-table-column>
-        <el-table-column label="用户名"></el-table-column>
-        <el-table-column label="邮箱"></el-table-column>
-        <el-table-column label="角色"></el-table-column>
-        <el-table-column label="状态"></el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="用户名" prop="user_name"></el-table-column>
+        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column label="角色" prop="role_name"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.user_status"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="">
+            <el-tooltip effect="dark" content="编辑" placement="top" :enterable="false">
+              <el-button type="primary" icon="el-icon-edit" size="mini" circle></el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="删除" placement="top" :enterable="false">
+              <el-button type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+              <el-button type="warning" icon="el-icon-setting" size="mini" circle></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
+      <div class="block">
+        <el-pagination
+          :page-size="10"
+          layout="prev, pager, next, jumper"
+          :total="tableData.length"
+        ></el-pagination>
+      </div>
     </el-card>
   </div>
 </template>
@@ -46,7 +73,6 @@ export default {
     async addUser() {
       let result = await this.$axios.post("add_user", this.userInfo);
       console.log(result);
-
       switch (result.data.status) {
         case 0:
           this.$message({
@@ -74,14 +100,21 @@ export default {
           break;
       }
     },
-    // 获取用户列表
-    getUserList() {}
+    // 获取用户列表(暂时全部获取无需分页)
+    async getUserList() {
+      let res = await this.$axios.get("user_list");
+      console.log(res);
+      this.tableData = res.data;
+    }
   },
   created() {
-    // console.log(this.userInfo);
+    this.getUserList();
   }
 };
 </script>
 
 <style lang="less" scoped>
+.el-pagination{
+  padding-top: 20px;
+}
 </style>

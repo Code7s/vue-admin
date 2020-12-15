@@ -1,10 +1,7 @@
 <template>
   <div id="register">
     <div class="register-box">
-      <h1 class="register-title">
-        注
-        <span>隐藏</span>册
-      </h1>
+      <h1 class="register-title">注册</h1>
       <el-form class="register-form" ref="registerRef" :model="registerForm" :rules="rules">
         <el-form-item prop="user_name">
           <el-input prefix-icon="el-icon-user" placeholder="用户名" v-model="registerForm.user_name"></el-input>
@@ -86,7 +83,6 @@ export default {
       this.$refs.registerRef.validate(async valid => {
         if (valid) {
           let result = await this.$axios.post("register", this.registerForm);
-          // console.log(result);
           // 注册对应弹窗
           if (result.status === 200) {
             switch (result.data.status) {
@@ -109,9 +105,11 @@ export default {
               case 4:
                 this.message = result.data.message;
                 this.open3();
+                break;
               case 5:
                 this.message = result.data.message;
                 this.open2();
+                break;
             }
           }
         }
@@ -152,7 +150,7 @@ export default {
 }
 .register-box {
   width: 400px;
-  height: min-content;
+  height: 500px;
   border-radius: 10px;
   background-color: #eee;
   position: absolute;
@@ -164,6 +162,9 @@ export default {
   padding: 0px 40px;
   .register-title {
     font-size: 24px;
+    letter-spacing:20px;
+    font-weight: normal;
+    text-indent: 20px;
     color: rgb(80, 80, 80);
     text-align: center;
     line-height: 30px;

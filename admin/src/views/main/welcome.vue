@@ -28,7 +28,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+
+};
 </script>
 
 <style lang="less" scoped>
@@ -48,7 +50,7 @@ h1 {
     font-size: 14px;
     color: #666;
     line-height: 25px;
-    a{
+    a {
       color: #666;
     }
   }

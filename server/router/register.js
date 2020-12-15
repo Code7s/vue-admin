@@ -9,8 +9,8 @@ module.exports = app => {
   // 注册接口
   router.post('/register', async (req, res) => {
     const { user_name, email, password, res_password } = req.body
-    // 最少2汉字最长不超过8个汉字，或最少4字母最长14字母(暂时不用)
-    const nameReg = /^[\u4e00-\u9fa5]{2,8}$|^[\dA-Za-z_]{4,14}$/
+    // 4到16位（中文，字母，数字，下划线，减号）
+    const nameReg = /^[\u4e00-\u9fa5a-zA-Z0-9_-]{4,16}$/
     // 验证邮箱和密码正则
     const emailReg = /^([A-Za-z0-9_\-\.]{1,8})+\@([A-Za-z0-9_\-\.]{1,8})+\.([A-Za-z]{2,4})$/
     const passwordReg = /^[A-Za-z0-9_\.]{6,16}$/
