@@ -19,11 +19,10 @@ app.use(express.json())
 
 // 数据库连接成功后再注册路由
 db.then(() => {
+  require('./router/index')(app)
   // 使用注册、登录路由，将全局app传给路由使用
   require('./router/login')(app)
   require('./router/register')(app)
-  require('./router/aside')(app)
-
 }).catch((err) => {
   console.log('数据库连接失败！\n' + err);
 })

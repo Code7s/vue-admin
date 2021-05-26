@@ -1,10 +1,7 @@
 <template>
   <div id="login">
     <div class="login-box">
-      <h1 class="login-title">
-        登
-        <span>隐藏</span>录
-      </h1>
+      <h1 class="login-title">登录</h1>
       <!-- :model绑定数据对象 :rules绑定验证规则 -->
       <el-form ref="loginRef" class="login-form" :model="loginForm" :rules="rules">
         <el-form-item prop="email">
@@ -13,7 +10,7 @@
         <el-form-item prop="password">
           <el-input
             prefix-icon="el-icon-lock"
-            placeholder="Password"
+            placeholder="password"
             type="password"
             v-model="loginForm.password"
           ></el-input>
@@ -70,7 +67,7 @@ export default {
   },
   methods: {
     goRegister() {
-      this.$router.push('/register');
+      this.$router.push("/register");
     },
     login() {
       this.$refs.loginRef.validate(async vaild => {
@@ -81,7 +78,7 @@ export default {
               // 登录成功
               case 0:
                 localStorage.token = result.data.token;
-                this.$router.push({ path: "/" });
+                this.$router.push({ path: "/welcome" });
                 this.open3();
                 break;
               case 1:
@@ -134,7 +131,7 @@ export default {
 }
 .login-box {
   width: 400px;
-  height: min-content;
+  height: 350px;
   border-radius: 10px;
   background-color: #eee;
   position: absolute;
@@ -146,9 +143,12 @@ export default {
   padding: 0 40px;
   .login-title {
     font-size: 24px;
+    text-indent: 20px;
+    letter-spacing: 20px;
     color: rgb(80, 80, 80);
     text-align: center;
     line-height: 30px;
+    font-weight: normal;
     padding: 10px 0;
     span {
       visibility: hidden;

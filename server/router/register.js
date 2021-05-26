@@ -8,14 +8,17 @@ module.exports = app => {
 
   // 注册接口
   router.post('/register', async (req, res) => {
-    const { email, password, res_password } = req.body
+    const { user_name, email, password, res_password } = req.body
+    // 4到16位（中文，字母，数字，下划线，减号）
+    const nameReg = /^[\u4e00-\u9fa5a-zA-Z0-9_-]{4,16}$/
     // 验证邮箱和密码正则
     const emailReg = /^([A-Za-z0-9_\-\.]{1,8})+\@([A-Za-z0-9_\-\.]{1,8})+\.([A-Za-z]{2,4})$/
     const passwordReg = /^[A-Za-z0-9_\.]{6,16}$/
-    // 最少2汉字最长不超过8个汉字，或最少4字母最长14字母(暂时不用)
-    // const nameReg = /^[\u4e00-\u9fa5]{2,8}$|^[\dA-Za-z_]{4,14}$/
 
-    if (!emailReg.test(email)) {
+    if (!nameReg.test(user_name)) {
+      res.send({ message: '用户名不符合规范,最少2个汉字最多14个字母', status: 5 })
+      return
+    } else if (!emailReg.test(email)) {
       res.send({ message: '请输入正确的邮箱地址', status: 1 })
       // 只要一个验证失败就不走下面的if
       return
@@ -34,7 +37,7 @@ module.exports = app => {
         res.send({ message: '该邮箱已经被注册！', status: 4 })
       } else {
         // 确保数据存入数据库再响应注册成功
-        await userModel.create({ email, password })
+        await userModel.create({ user_name, email, password })
         res.send({ message: '注册成功！请返回登录', status: 0 })
       }
     } catch (err) {

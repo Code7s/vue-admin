@@ -26,7 +26,7 @@ let userSchema = new Schema({
     type: String,
     default: '新用户'
   },
-  data: {
+  date: {
     type: Date,
     default: Date.now()
   },
